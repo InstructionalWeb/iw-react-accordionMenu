@@ -1,6 +1,6 @@
 {
   "name": "iw-react-accordion-menu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An expandable, vertical menu for react",
   "main": "dist/index.js",
   "scripts": {
