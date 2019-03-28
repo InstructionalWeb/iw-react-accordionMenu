@@ -9,7 +9,13 @@ class AccordionMenu extends React.Component {
     return nav.map(item => {
       if (item.children) {
         return (
-          <Submenu key={uuid4()} title={item.title} children={item.children} />
+          <Submenu
+            key={uuid4()}
+            title={item.title}
+            children={item.children}
+            icon={this.props.icon || null}
+            activeIcon={this.props.activeIcon || null}
+          />
         );
       }
       return (
@@ -24,7 +30,7 @@ class AccordionMenu extends React.Component {
 
   render() {
     return (
-      <Nav className="iw-accordionMenu">
+      <Nav className="iw-accordionMenu" {...this.props}>
         <div
           style={{
             marginLeft: '-1rem'

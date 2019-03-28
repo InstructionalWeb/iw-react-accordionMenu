@@ -15,7 +15,14 @@ class SubmenuList extends React.Component {
       TweenLite.to(this.submenu, 0.25, { height: 0 });
     }
 
-    return <List ref={el => (this.submenu = el)}>Submenu List</List>;
+    return (
+      <List
+        aria-expanded={this.props['aria-expanded']}
+        ref={el => (this.submenu = el)}
+      >
+        Submenu List
+      </List>
+    );
   }
 }
 

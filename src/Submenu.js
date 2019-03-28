@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import uuid4 from 'uuid/v4';
 import TweenLite from 'gsap';
 import Arrow from './arrow';
-// import SubmenuList from "./SubmenuList";
 
 class Submenu extends React.Component {
   state = {
-    isOpen: false
+    isOpen: false,
+    buttonId: uuid4(),
+    submenuId: uuid4()
   };
   toggleSubmenu = () => {
     this.setState(
@@ -31,7 +32,7 @@ class Submenu extends React.Component {
     return nav.map(item => {
       if (item.children) {
         return (
-          <Submenu key={uuid4()} title={item.title} children={item.children} />
+          <Submenu key={uuid4()} title={item.title} children={item.children} icon={this.props.icon} activeIcon={this.props.activeIcon} />
         );
       }
       return (
@@ -43,29 +44,60 @@ class Submenu extends React.Component {
       );
     });
   };
+  componentDidMount() {
+    // this.setState({
+    //   buttonId: uuid4(),
+    //   submenuId: uuid4()
+    // });
+  }
+  renderIcon(isOpen) {
+    const Icon = this.props.icon || Arrow;
+    const ActiveIcon = this.props.activeIcon || Arrow;
+
+    return isOpen ? (
+        <ActiveIcon
+          style={{
+            display: 'inline-block',
+            position: 'absolute',
+            left: 0,
+            top: '0.45rem'
+          }}
+          expanded={this.state.isOpen ? this.state.isOpen.toString() : undefined}
+        />
+    ): (
+      <Icon
+        style={{
+          display: 'inline-block',
+          position: 'absolute',
+          left: 0,
+          top: '0.45rem'
+        }}
+        expanded={this.state.isOpen ? this.state.isOpen.toString() : undefined}
+      />
+    )
+  }
   render() {
     return (
       <li className="iw-accordionMenu__menuItem">
         <button
           className="iw-accordionMenu__menuToggle"
           onClick={this.toggleSubmenu}
+          id={this.state.buttonId}
+          aria-expanded={this.state.isOpen.toString()}
+          aria-controls={this.state.submenuId}
         >
-          <Arrow
-            style={{
-              display: 'inline-block',
-              position: 'absolute',
-              left: 0,
-              top: '0.45rem'
-            }}
-            expanded={this.state.isOpen}
-          />{' '}
+          {this.renderIcon(this.state.isOpen)}
           {this.props.title}
         </button>
         <SubmenuList
           className="iw-accordionMenu__submenu"
           ref={el => (this.submenu = el)}
+          aria-expanded={this.state.isOpen.toString()}
+          id={this.state.submenuId}
+          aria-labelledby={this.state.buttonId}
+          aria-hidden={!this.state.isOpen.toString()}
         >
-          <li>{this.buildNav(this.props.children)}</li>
+        {this.buildNav(this.props.children)}
         </SubmenuList>
       </li>
     );
